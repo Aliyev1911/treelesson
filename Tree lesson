@@ -1,0 +1,121 @@
+from tkinter import *
+from tkinter import ttk
+
+# Define a function to add a new row to the table
+def add_row():
+    new_id = id_entry.get()
+    new_name = name_entry.get()
+    new_grade=grade_entry.get()
+    new_class= class_entry.get()
+    new_address = address_entry.get()
+    tree.insert('', 'end', values=(new_id, new_name,new_class,new_grade, new_address))
+    # Clear the input fields after adding the row
+    id_entry.delete(0, 'end')
+    name_entry.delete(0, 'end')
+    class_entry.delete(0,'end')
+    grade_entry.delete(0,'end')
+    address_entry.delete(0, 'end')
+
+
+# Define a function to delete the selected row from the table
+def delete_row():
+    selected_item = tree.selection()[0]
+    tree.delete(selected_item)
+
+# Define a function to edit the selected row in the table
+def edit_row():
+    save_button.config(state=NORMAL)
+    selected_item = tree.selection()[0]
+    values = tree.item(selected_item)['values']
+    # Load the values from the selected row into the input fields
+    id_entry.delete(0, 'end')
+    id_entry.insert(0, values[0])
+    name_entry.delete(0, 'end')
+    name_entry.insert(0, values[1])
+    grade_entry.delete(0, 'end')
+    grade_entry.insert(0, values[2])
+    class_entry.delete(0, 'end')
+    class_entry.insert(0, values[3])
+    address_entry.delete(0, 'end')
+    address_entry.insert(0, values[4])
+
+# Define a function to save the edited row to the table
+def save_row():
+    # Remove the selected row from the table
+    selected_item = tree.selection()[0]
+    tree.delete(selected_item)
+    #save the new data
+    new_id = id_entry.get()
+    new_name = name_entry.get()
+    new_grade = grade_entry.get()
+    new_class = class_entry.get()
+    new_address = address_entry.get()
+    tree.insert('', 'end', values=(new_id, new_name,new_grade,new_class, new_address))
+    # Clear the input fields after saving the row
+    id_entry.delete(0, 'end')
+    name_entry.delete(0, 'end')
+    address_entry.delete(0, 'end')
+    grade_entry.delete(0, 'end')
+    class_entry.delete(0, 'end')
+# Create the main window and set its title
+form = Tk()
+form.title("Table with Add, Delete, and Edit Buttons")
+
+# Create a frame for the input fields and buttons
+input_frame = Frame(form)
+input_frame.pack()
+
+# Create the input fields and labels
+id_label = Label(input_frame, text="ID:")
+id_label.grid(row=0, column=0)
+id_entry = Entry(input_frame)
+id_entry.grid(row=0, column=1)
+
+name_label = Label(input_frame, text="Name:")
+name_label.grid(row=1, column=0)
+name_entry = Entry(input_frame)
+name_entry.grid(row=1, column=1)
+
+address_label = Label(input_frame, text="Address:")
+address_label.grid(row=2, column=0)
+address_entry = Entry(input_frame)
+address_entry.grid(row=2, column=1)
+
+grade_label = Label(input_frame, text="Grade:")
+grade_label.grid(row=0, column=2)
+grade_entry = Entry(input_frame)
+grade_entry.grid(row=0, column=3)
+
+class_label = Label(input_frame, text="Class:")
+class_label.grid(row=1, column=2)
+class_entry = Entry(input_frame)
+class_entry.grid(row=1, column=3)
+
+# Create the Add, Delete, Edit and Save buttons
+add_button = Button(input_frame, text="Add", command=add_row)
+add_button.grid(row=3, column=0)
+
+delete_button = Button(input_frame, text="Delete", command=delete_row)
+delete_button.grid(row=3, column=1)
+
+edit_button = Button(input_frame, text="Edit", command=edit_row)
+edit_button.grid(row=3, column=2)
+
+save_button = Button(input_frame, text="Save", command=save_row,state=DISABLED, )
+save_button.grid(row=3,column=3)
+
+# Create the Treeview widget for the table
+tree = ttk.Treeview(form, columns=("ID","Name","Grade","Class","Address"), show="headings")
+tree.heading("ID", text="ID")
+tree.heading("Name", text="Name")
+tree.heading("Grade", text="Grade")
+tree.heading("Class", text="Class")
+tree.heading("Address", text="Address")
+
+tree.pack()
+
+# Add some sample rows to the table
+tree.insert('', 'end', values=("1", "John Doe","7 ","A","123 Main St."))
+tree.insert('', 'end', values=("2", "Jane Smith","8 ","B", "456 Oak Ave"))
+
+form.mainloop()
